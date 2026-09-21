@@ -1,16 +1,27 @@
+from flask import Flask
+from threading import Thread
 import os
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
-TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = os.getenv("TOKEN")
+
+app = Flask(__name__)
+@app.route('/')
+def home():
+    return "Bot is alive!"
+
+def run_web():
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 10000)))
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Salut Boss ! Ton bot VPN est en ligne 🚀\nEnvoie /v2ray pour une config.")
+    await update.message.reply_text("Salut Boss ! Ton bot est en ligne 24h/24")
 
-async def v2ray(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Config V2Ray : vmess://exemple-a-changer")
+def main():
+    Thread(target=run_web).start()
+    application = Application.builder().token(TOKEN).build()
+    application.add_handler(CommandHandler("start", start))
+    application.run_polling()
 
-app = Application.builder().token(TOKEN).build()
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("v2ray", v2ray))
-app.run_polling()
+if __name__ == "__main__":
+    main()
