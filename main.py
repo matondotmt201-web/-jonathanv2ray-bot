@@ -7,6 +7,7 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 TOKEN = os.getenv("TOKEN")
 
 app = Flask(__name__)
+
 @app.route('/')
 def home():
     return "Bot is alive!"
@@ -15,7 +16,7 @@ def run_web():
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 10000)))
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Salut Boss ! Ton bot est en ligne 24h/24")
+    await update.message.reply_text("Salut Boss ! Bot en ligne 24h/24 🔥")
 
 def main():
     Thread(target=run_web).start()
